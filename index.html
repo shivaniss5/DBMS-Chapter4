@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Chapter 4 - Intermediate SQL</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">DBMS Study</div>
+  <nav>
+    <button class="nav-btn" data-target="home">Home</button><button class="nav-btn" data-target="definitions">Definitions</button><button class="nav-btn" data-target="tips">Exam Tips</button><button class="nav-btn" data-target="diagrams">Diagrams</button><button class="nav-btn" data-target="quiz">Quiz</button><button class="nav-btn" data-target="summary">Summary</button>
+  </nav>
+</header>
+
+<main>
+<section id="home" class="section active">
+  <div class="hero">
+    <p class="eyebrow">DBMS • CHAPTER 4</p>
+    <h1>Intermediate SQL</h1>
+    <p class="lead">A simple study guide covering Join Expressions, Views, Transactions, Integrity Constraints, SQL Data Types and Schemas, Index Definition in SQL, and Authorization.</p>
+    <button id="continueBtn" class="btn continue-btn">Continue Learning →</button>
+  </div>
+  <h2>Chapter Topics</h2>
+  <div class="card-grid">
+    <article class="card"><h3>Join Expressions</h3><p>Natural, inner and outer joins, ON and USING</p></article><article class="card"><h3>Views</h3><p>Virtual relations, materialized views and updates</p></article><article class="card"><h3>Transactions</h3><p>COMMIT, ROLLBACK, atomicity and isolation</p></article><article class="card"><h3>Integrity Constraints</h3><p>Keys, CHECK, foreign keys and assertions</p></article><article class="card"><h3>SQL Data Types</h3><p>DATE, TIME, TIMESTAMP, INTERVAL, BLOB and CLOB</p></article><article class="card"><h3>Index &amp; Authorization</h3><p>Indexes, privileges, GRANT, REVOKE and roles</p></article>
+  </div>
+</section>
+
+<section id="definitions" class="section">
+  <div class="section-heading"><p class="eyebrow">CORE STUDY MATERIAL</p><h2>Definitions & Concepts</h2><p>Important definitions, explanations, syntax and examples from the complete chapter PDF.</p></div>
+<div class="topic-block"><h3 class="topic-title">Join Expressions</h3><article class="definition-card"><h4>Joined Relations</h4><p>Join operations take two relations and return another relation. A join can be viewed as a Cartesian product in which tuples from the two relations must match under a condition; the join also determines which attributes appear in the result. The chapter lists Natural Join, Inner Join and Outer Join.</p></article><article class="definition-card"><h4>Natural Join</h4><p>A natural join matches tuples with the same values for all common attributes and retains only one copy of each common column. Example: SELECT name, course_id FROM student NATURAL JOIN takes;</p></article><article class="definition-card"><h4>Using Clause</h4><p>The USING construct lets us specify exactly which columns should be equated, avoiding accidental matching of attributes with the same name. Example: SELECT name, title FROM (student NATURAL JOIN takes) JOIN course USING (course_id);</p></article><article class="definition-card"><h4>ON Condition</h4><p>The ON condition allows a general predicate over the relations being joined. It is written like a WHERE predicate but uses ON. Example: SELECT * FROM student JOIN takes ON student_ID = takes_ID; This is equivalent to SELECT * FROM student, takes WHERE student_ID = takes_ID;</p></article><article class="definition-card"><h4>Outer Join</h4><p>An outer join extends the join operation to avoid loss of information. It computes the join and then adds tuples from one relation that do not match tuples in the other relation, using NULL values. Forms: LEFT OUTER JOIN, RIGHT OUTER JOIN and FULL OUTER JOIN.</p></article><article class="definition-card"><h4>Join Type and Join Condition</h4><p>The join condition defines which tuples in the two relations match. The join type defines how tuples that do not match any tuple in the other relation are treated.</p></article><article class="definition-card"><h4>Join Examples</h4><p>The chapter gives examples including: course NATURAL RIGHT OUTER JOIN prereq; course FULL OUTER JOIN prereq USING (course_id); course INNER JOIN prereq ON course.course_id = prereq.course_id; and course LEFT OUTER JOIN prereq ON course.course_id = prereq.course_id.</p></article></div><div class="topic-block"><h3 class="topic-title">Views</h3><article class="definition-card"><h4>View</h4><p>A view is a virtual relation made visible to a user even though it is not part of the conceptual model. Views can hide selected data from users; for example, an instructor's ID, name and department can be exposed without exposing salary.</p></article><article class="definition-card"><h4>View Definition</h4><p>A view is defined using CREATE VIEW: CREATE VIEW v AS &lt;query expression&gt;. The query expression is any legal SQL expression. The view name can then be used to refer to the virtual relation. Defining a view saves an expression; it does not create a new relation by simply evaluating and storing the query result.</p></article><article class="definition-card"><h4>View Definition and Use</h4><p>Example: CREATE VIEW faculty AS SELECT ID, name, dept_name FROM instructor; Then: SELECT name FROM faculty WHERE dept_name = 'Biology'; A view with named columns can also be used for grouped totals: CREATE VIEW departments_total_salary(dept_name, total_salary) AS SELECT dept_name, SUM(salary) FROM instructor GROUP BY dept_name;</p></article><article class="definition-card"><h4>Views Using Other Views</h4><p>One view may be used in the expression defining another view. v1 depends directly on v2 if v2 is used in v1's definition. v1 depends on v2 if it depends directly or through a path of dependencies. A view is recursive if it depends on itself.</p></article><article class="definition-card"><h4>Materialized Views</h4><p>Some database systems physically store view relations. A physical copy is created when the view is defined. Such a view is called a materialized view. If underlying relations are updated, the materialized result can become out of date and must be maintained.</p></article><article class="definition-card"><h4>Updating Views</h4><p>Most SQL implementations allow updates only on simple views. The chapter's conditions are: the FROM clause has only one database relation; the SELECT clause contains only attribute names of that relation, with no expressions, aggregates or DISTINCT; attributes not listed may be set to NULL; and there is no GROUP BY or HAVING clause. Some view updates cannot be translated uniquely, and some cannot be translated at all.</p></article></div><div class="topic-block"><h3 class="topic-title">Transactions</h3><article class="definition-card"><h4>Transaction</h4><p>A transaction is a sequence of query and/or update statements and is a unit of work. The SQL standard specifies that a transaction begins implicitly when an SQL statement is executed.</p></article><article class="definition-card"><h4>COMMIT and ROLLBACK</h4><p>COMMIT WORK makes the updates performed by the transaction permanent in the database. ROLLBACK WORK undoes all updates performed by SQL statements in the transaction.</p></article><article class="definition-card"><h4>Atomic Transaction and Isolation</h4><p>An atomic transaction is either fully executed or rolled back as if it never occurred. Transactions also provide isolation from concurrent transactions.</p></article></div><div class="topic-block"><h3 class="topic-title">Integrity Constraints</h3><article class="definition-card"><h4>Integrity Constraints</h4><p>Integrity constraints guard against accidental damage to a database by ensuring that authorized changes do not result in loss of data consistency. The chapter examples include minimum account balances, minimum salaries and required non-null phone numbers.</p></article><article class="definition-card"><h4>Single-Relation Constraints</h4><p>The chapter lists NOT NULL, PRIMARY KEY, UNIQUE and CHECK(P) as constraints on a single relation.</p></article><article class="definition-card"><h4>NOT NULL</h4><p>NOT NULL requires a value to be supplied. Example: name VARCHAR(20) NOT NULL; budget NUMERIC(12,2) NOT NULL.</p></article><article class="definition-card"><h4>PRIMARY KEY</h4><p>A primary key is the key used to identify tuples in a relation. The chapter contrasts it with candidate keys under UNIQUE: candidate keys are permitted to be NULL, whereas primary keys are not.</p></article><article class="definition-card"><h4>UNIQUE</h4><p>UNIQUE(A1, A2, …, Am) specifies that the listed attributes form a candidate key. Candidate keys are permitted to be NULL, in contrast to primary keys.</p></article><article class="definition-card"><h4>CHECK</h4><p>CHECK(P) specifies a predicate P that must be satisfied by every tuple in a relation. Example: CHECK (semester IN ('Fall','Winter','Spring','Summer')).</p></article><article class="definition-card"><h4>Referential Integrity</h4><p>Referential integrity ensures that a value appearing in one relation for a given set of attributes also appears for a corresponding set of attributes in another relation. If A is a set of attributes in R and S, and A is the primary key of S, A is a foreign key of R if every value of A in R also appears in S.</p></article><article class="definition-card"><h4>Foreign Key Syntax</h4><p>A foreign key can be specified in CREATE TABLE: FOREIGN KEY (dept_name) REFERENCES department. By default, it references the primary-key attributes of the referenced table; the referenced attribute list may also be specified explicitly.</p></article><article class="definition-card"><h4>Cascading Actions</h4><p>When a referential-integrity constraint is violated, the normal procedure is to reject the action. For DELETE or UPDATE, cascading may be used. Example: ON DELETE CASCADE ON UPDATE CASCADE. Alternatives include SET NULL and SET DEFAULT.</p></article><article class="definition-card"><h4>Constraint Violation During Transactions</h4><p>For self-referencing foreign keys such as person having father and mother references to person, the chapter gives three approaches: insert father and mother first; initially set them to NULL and update later when allowed; or defer constraint checking.</p></article><article class="definition-card"><h4>Complex CHECK Conditions</h4><p>The predicate in CHECK can be an arbitrary predicate that can include a subquery. Example: CHECK (time_slot_id IN (SELECT time_slot_id FROM time_slot)). The condition must be checked when section is inserted/modified and when time_slot changes.</p></article><article class="definition-card"><h4>Assertions</h4><p>An assertion is a predicate expressing a condition that the database should always satisfy. Syntax: CREATE ASSERTION &lt;assertion-name&gt; CHECK (&lt;predicate&gt;); The chapter examples include constraints on total credits and preventing an instructor from teaching in two classrooms in the same time slot and semester.</p></article></div><div class="topic-block"><h3 class="topic-title">SQL Data Types and Schemas</h3><article class="definition-card"><h4>DATE</h4><p>DATE stores dates containing a four-digit year, month and date. Example: DATE '2005-7-27'.</p></article><article class="definition-card"><h4>TIME</h4><p>TIME stores time of day in hours, minutes and seconds. Examples: TIME '09:00:30' and TIME '09:00:30.75'.</p></article><article class="definition-card"><h4>TIMESTAMP</h4><p>TIMESTAMP stores a date plus time of day. Example: TIMESTAMP '2005-7-27 09:00:30.75'.</p></article><article class="definition-card"><h4>INTERVAL</h4><p>INTERVAL represents a period of time. Example: INTERVAL '1' DAY. Subtracting date/time/timestamp values produces an interval, and interval values can be added to date/time/timestamp values.</p></article><article class="definition-card"><h4>Large-Object Types</h4><p>Large objects such as photos, videos and CAD files can be stored as large objects. BLOB is a binary large object containing uninterpreted binary data whose interpretation is left to an application outside the database system. CLOB is a character large object containing character data. When a query returns a large object, a pointer is returned rather than the large object itself.</p></article><article class="definition-card"><h4>User-Defined Types</h4><p>CREATE TYPE creates a user-defined type. Example: CREATE TYPE Dollars AS NUMERIC(12,2) FINAL; It can then be used in a table, such as budget Dollars.</p></article><article class="definition-card"><h4>Domains</h4><p>CREATE DOMAIN in SQL-92 creates a user-defined domain type. Types and domains are similar, but domains can have constraints such as NOT NULL. Example: CREATE DOMAIN degree_level VARCHAR(10) CONSTRAINT degree_level_test CHECK (VALUE IN ('Bachelors','Masters','Doctorate'));</p></article></div><div class="topic-block"><h3 class="topic-title">Index Definition in SQL</h3><article class="definition-card"><h4>Index</h4><p>An index is a data structure on an attribute of a relation that lets the database system find tuples with a specified attribute value efficiently, without scanning every tuple. It is useful when queries reference only a small proportion of records.</p></article><article class="definition-card"><h4>CREATE INDEX Syntax</h4><p>CREATE INDEX &lt;name&gt; ON &lt;relation-name&gt; (attribute);</p></article><article class="definition-card"><h4>Index Example</h4><p>Example: CREATE INDEX studentID_index ON student(ID). Then SELECT * FROM student WHERE ID = '12345' can use the index to find the required record without looking at all student records.</p></article></div><div class="topic-block"><h3 class="topic-title">Authorization</h3><article class="definition-card"><h4>Privileges</h4><p>Users may be assigned authorizations on parts of a database. Each authorization type is a privilege. The chapter lists READ, INSERT, UPDATE and DELETE. A user may receive all, none or a combination of these privileges on a relation or view.</p></article><article class="definition-card"><h4>Database-Schema Modification Authorizations</h4><p>INDEX allows creation and deletion of indices. RESOURCES allows creation of new relations. ALTERATION allows addition or deletion of attributes in a relation. DROP allows deletion of relations.</p></article><article class="definition-card"><h4>GRANT</h4><p>GRANT is used to confer authorization. Syntax: GRANT &lt;privilege list&gt; ON &lt;relation or view&gt; TO &lt;user list&gt;. The user list can be a user-id, PUBLIC, or a role. Example: GRANT SELECT ON department TO Amit, Satoshi. Granting a privilege on a view does not imply privileges on underlying relations. The grantor must already hold the privilege or be the database administrator.</p></article><article class="definition-card"><h4>SQL Privileges</h4><p>SELECT gives read access to a relation or ability to query using a view. INSERT allows insertion of tuples. UPDATE allows updating with UPDATE. DELETE allows deletion of tuples. ALL PRIVILEGES is a short form for all allowable privileges.</p></article><article class="definition-card"><h4>REVOKE</h4><p>REVOKE removes authorization. Syntax: REVOKE &lt;privilege list&gt; ON &lt;relation or view&gt; FROM &lt;user list&gt;. Example: REVOKE SELECT ON student FROM U1, U2, U3. ALL may be used to revoke all privileges the revokee may hold. Privileges that depend on the revoked privilege are also revoked. With PUBLIC, all users lose the privilege except those granted it explicitly; duplicate grants can affect retention.</p></article><article class="definition-card"><h4>Roles</h4><p>A role distinguishes among users in terms of what they can access or update. Create one with CREATE ROLE &lt;name&gt;, for example CREATE ROLE instructor. Users can be assigned to roles with GRANT instructor TO Amit. Privileges can be granted to roles, and roles can be granted to users or other roles, forming a chain of roles.</p></article><article class="definition-card"><h4>Authorization on Views</h4><p>The chapter illustrates creating a view such as geo_instructor and granting SELECT on the view to geo_staff. It raises the question of what happens when a geo_staff member has no permissions on the underlying instructor relation, or when the view creator lacks some permissions on instructor.</p></article><article class="definition-card"><h4>Other Authorization Features</h4><p>REFERENCES privilege allows creation of a foreign key, for example GRANT REFERENCES (dept_name) ON department TO Mariano. The chapter also introduces transfer of privileges using WITH GRANT OPTION, and revocation using CASCADE or RESTRICT.</p></article></div></section>
+
+<section id="tips" class="section">
+<div class="section-heading"><p class="eyebrow">EXAM REVISION</p><h2>Exam Tips</h2></div>
+<div class="tips-grid">
+<article class="tip-card"><h3>2 / 3 Marks</h3><ul>
+<li>Define Natural Join, View, Transaction, Integrity Constraint, Referential Integrity and Index.</li>
+<li>Write the meaning of COMMIT and ROLLBACK.</li>
+<li>List the three outer joins.</li><li>List SQL privileges: SELECT, INSERT, UPDATE, DELETE.</li>
+</ul></article>
+<article class="tip-card"><h3>5 Marks</h3><ul>
+<li>Differentiate join types and explain ON versus USING.</li>
+<li>Explain simple views and conditions for view updates.</li>
+<li>Explain NOT NULL, PRIMARY KEY, UNIQUE and CHECK.</li>
+<li>Explain DATE, TIME, TIMESTAMP, INTERVAL, BLOB and CLOB.</li>
+</ul></article>
+<article class="tip-card"><h3>10 / 12 Marks</h3><ul>
+<li>Explain Join Expressions with natural, inner and outer joins and examples.</li>
+<li>Explain Views, materialized views, view dependencies and view updates.</li>
+<li>Explain Referential Integrity, cascading actions, complex CHECK conditions and assertions.</li>
+<li>Explain Authorization with GRANT, REVOKE, roles and view authorization.</li>
+</ul></article>
+<article class="tip-card"><h3>Syntax to Remember</h3><pre>CREATE VIEW v AS &lt;query&gt;;
+
+CREATE INDEX name
+ON relation(attribute);
+
+GRANT privilege
+ON relation_or_view
+TO user_list;
+
+REVOKE privilege
+ON relation_or_view
+FROM user_list;</pre></article>
+</div>
+</section>
+
+<section id="diagrams" class="section">
+<div class="section-heading"><p class="eyebrow">VISUAL REVISION</p><h2>Important Diagrams</h2><p>Simple original diagrams representing the join relationships described in the chapter.</p></div>
+<div class="diagram-grid">
+<article class="diagram-card"><img src="natural_join.png" alt="Natural Join"><h3>Natural Join</h3><p>Matches equal values in common attributes and keeps one copy of common columns.</p></article><article class="diagram-card"><img src="left_outer_join.png" alt="Left Outer Join"><h3>Left Outer Join</h3><p>Keeps all tuples from the left relation; unmatched right-side values use NULL.</p></article><article class="diagram-card"><img src="right_outer_join.png" alt="Right Outer Join"><h3>Right Outer Join</h3><p>Keeps all tuples from the right relation; unmatched left-side values use NULL.</p></article><article class="diagram-card"><img src="full_outer_join.png" alt="Full Outer Join"><h3>Full Outer Join</h3><p>Keeps matching and non-matching tuples from both relations; NULL represents missing matches.</p></article></div></section>
+
+<section id="quiz" class="section">
+<div class="section-heading"><p class="eyebrow">SELF TEST</p><h2>Chapter Quiz</h2><p>10 MCQs based only on the uploaded Chapter 4 PDF.</p></div>
+<div class="quiz-card">
+<div class="quiz-meta"><span id="question-number">Question 1 of 10</span><span id="score-live">Score: 0</span></div>
+<h3 id="question"></h3>
+<div id="options"></div>
+<p id="feedback" class="feedback"></p>
+<div class="quiz-actions">
+<button id="prevBtn" class="btn secondary">Previous</button>
+<button id="nextBtn" class="btn">Next</button>
+</div>
+<div id="result" class="result hidden"></div>
+<button id="restartBtn" class="btn hidden">Restart Quiz</button>
+</div>
+</section>
+
+<section id="summary" class="section">
+<div class="section-heading"><p class="eyebrow">FINAL REVISION</p><h2>Chapter Summary</h2></div>
+<div class="summary-card">
+<h3>Remember these first</h3>
+<ul>
+<li><b>Joins:</b> Natural Join matches common attributes; ON gives a general join predicate; outer joins preserve unmatched tuples using NULL.</li>
+<li><b>Views:</b> A view is a virtual relation defined by a saved query expression. Materialized views physically store a copy and need maintenance after underlying updates.</li>
+<li><b>Transactions:</b> COMMIT makes updates permanent; ROLLBACK undoes them. Atomicity means all-or-nothing execution, with isolation from concurrent transactions.</li>
+<li><b>Constraints:</b> NOT NULL, PRIMARY KEY, UNIQUE and CHECK protect consistency. Referential integrity is enforced through foreign keys.</li>
+<li><b>Data types:</b> DATE, TIME, TIMESTAMP and INTERVAL handle temporal data; BLOB and CLOB handle large objects.</li>
+<li><b>Index:</b> An index helps find tuples with a specified attribute value efficiently without scanning every tuple.</li>
+<li><b>Authorization:</b> GRANT gives privileges; REVOKE removes them. Roles group access rights, and privileges include SELECT, INSERT, UPDATE and DELETE.</li>
+</ul>
+</div>
+</section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>

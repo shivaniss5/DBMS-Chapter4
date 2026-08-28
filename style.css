@@ -50,3 +50,30 @@ pre{background:#f5f2f8;padding:14px;border-radius:8px;overflow:auto;color:#3f315
 .continue-btn{margin-top:22px;padding:11px 18px}
 .home-actions{margin:18px 0 8px}
 .home-actions .btn{font-size:15px}
+.brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.student-info {
+    font-size: 13px;
+    font-weight: 700;
+    color: #138f8f;
+    border-left: 1px solid #ddd4e7;
+    padding-left: 14px;
+}
+
+@media (max-width: 560px) {
+    .brand-wrap {
+        gap: 9px;
+        flex-wrap: wrap;
+    }
+
+    .student-info {
+        border-left: none;
+        padding-left: 0;
+        width: 100%;
+        font-size: 12px;
+    }
+}
